@@ -32,7 +32,7 @@ public class Fraction implements Comparable {
         return euclide(numerateur, denominateur);
     }
 
-    public Fraction reduire(Fraction frac){
+    public static Fraction reduire(Fraction frac){
         int d = frac.pgcd();
         frac.numerateur /= d;
         frac.denominateur /= d;
