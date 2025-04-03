@@ -32,6 +32,14 @@ public class Matrice {
         valeurs[i][j] = val;
     }
 
+    public int getNumRows() {
+        return m;
+    }
+
+    public int getNumCols() {
+        return n;
+    }
+
     private static int maxLen(Matrice m){
         int curMax = 0;
         for (Fraction[] fracs:m.valeurs){
@@ -45,15 +53,20 @@ public class Matrice {
         return curMax;
     }
 
-    public static void affichage(Matrice m) {
-        int len = maxLen(m)+2;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        int len = maxLen(this)+2;
         String format = "%" + len + "s";
-        for (int i = 0; i < m.m; i++) {
-            for (int j = 0; j < m.n; j++) {
-                System.out.printf(format,m.getValeur(i, j));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                sb.append(String.format(format, getValeur(i, j)));
             }
-            System.out.println();
+            sb.append("\n");
         }
+
+        return sb.toString();
     }
 
     public static Matrice transpose(Matrice m) {
@@ -117,6 +130,30 @@ public class Matrice {
             }
         }
         return resultat;
+    }
+
+    public static Matrice sousMatrice(Matrice m, int[] lignes, int[] colonnes) {
+        Matrice sousMatrice = new Matrice(lignes.length, colonnes.length);
+        for (int i = 0; i < lignes.length; i++) {
+            for (int j = 0; j < colonnes.length; j++) {
+                sousMatrice.setValeur(i, j, m.getValeur(lignes[i], colonnes[j]));
+            }
+        }
+        return sousMatrice;
+    }
+
+    public static Matrice identite(int n) {
+        Matrice identite = new Matrice(n, n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    identite.setValeur(i, j, new Fraction(1));
+                } else {
+                    identite.setValeur(i, j, new Fraction(0));
+                }
+            }
+        }
+        return identite;
     }
 
     public static Matrice simplexe(Matrice m, int[] base_initiale, int[] base_finale) {
