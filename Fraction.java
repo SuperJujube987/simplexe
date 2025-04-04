@@ -16,6 +16,17 @@ public class Fraction implements Comparable {
         this.denominateur = frac.denominateur;
     }
 
+    public static Fraction parse(String str){
+        String[] parts = str.split("/");
+        if (parts.length == 1) {
+            return Fraction.reduire(new Fraction(Integer.parseInt(parts[0])));
+        } else if (parts.length == 2) {
+            return Fraction.reduire(new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+        } else {
+            throw new IllegalArgumentException("La fraction doit être au format 'numerateur/denominateur'");
+        }
+    }
+
     private int euclide(int num1, int num2){
         int reste = num2;
         int a = num1;
@@ -36,15 +47,19 @@ public class Fraction implements Comparable {
         int d = frac.pgcd();
         frac.numerateur /= d;
         frac.denominateur /= d;
+        if (frac.denominateur < 0){
+            frac.numerateur = -frac.numerateur;
+            frac.denominateur = -frac.denominateur;
+        }
         return frac;
     }
 
-    private Fraction inverse(){
-        return new Fraction(denominateur,numerateur);
+    public static Fraction inverse(Fraction f){
+        return new Fraction(f.denominateur,f.numerateur);
     }
 
-    private Fraction oppose(){
-        return new Fraction(-numerateur,denominateur);
+    public static Fraction oppose(Fraction f){
+        return new Fraction(-f.numerateur,f.denominateur);
     }
 
     public Fraction addition(Fraction q){
@@ -52,7 +67,7 @@ public class Fraction implements Comparable {
     }
 
     public Fraction soustraction(Fraction q){
-        return reduire(addition(q.oppose()));
+        return reduire(addition(Fraction.oppose(q)));
     }
 
     public Fraction multiplication(Fraction q){
@@ -60,7 +75,7 @@ public class Fraction implements Comparable {
     }
 
     public Fraction division(Fraction q){
-        return reduire(multiplication(q.inverse()));
+        return reduire(multiplication(Fraction.inverse(q)));
     }
 
     public Fraction produit(int a){
@@ -89,7 +104,7 @@ public class Fraction implements Comparable {
     @Override
     public int compareTo(Object o) {
         if (!(o instanceof Integer || o instanceof Fraction))
-            throw new ClassCastException("Object not a type comparable to a Fraction");
+            throw new ClassCastException("Objet non comparable à une fraction");
         Fraction a;
         if (o instanceof Integer){
             a = new Fraction((Integer) o);
