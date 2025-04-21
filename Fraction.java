@@ -4,6 +4,10 @@ public class Fraction implements Comparable {
     public Fraction(int numerateur, int denominateur) {
         this.numerateur = numerateur;
         this.denominateur = denominateur;
+        Fraction frac = Fraction.reduire(this);
+        this.numerateur = frac.numerateur;
+        this.denominateur = frac.denominateur;
+
     }
 
     public Fraction(int num){
@@ -19,9 +23,9 @@ public class Fraction implements Comparable {
     public static Fraction parse(String str){
         String[] parts = str.split("/");
         if (parts.length == 1) {
-            return Fraction.reduire(new Fraction(Integer.parseInt(parts[0])));
+            return new Fraction(Integer.parseInt(parts[0]));
         } else if (parts.length == 2) {
-            return Fraction.reduire(new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+            return new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         } else {
             throw new IllegalArgumentException("La fraction doit être au format 'numerateur/denominateur'");
         }
@@ -43,13 +47,13 @@ public class Fraction implements Comparable {
         return euclide(numerateur, denominateur);
     }
 
-    public static Fraction reduire(Fraction frac){
+    private static Fraction reduire(Fraction frac){
         int d = frac.pgcd();
         frac.numerateur /= d;
         frac.denominateur /= d;
         if (frac.denominateur < 0){
-            frac.numerateur = -frac.numerateur;
-            frac.denominateur = -frac.denominateur;
+            frac.numerateur *= -1;
+            frac.denominateur *= -1;
         }
         return frac;
     }
@@ -63,23 +67,23 @@ public class Fraction implements Comparable {
     }
 
     public Fraction addition(Fraction q){
-        return reduire(new Fraction(this.numerateur*q.denominateur+this.denominateur*q.numerateur,this.denominateur*q.denominateur));
+        return new Fraction(this.numerateur*q.denominateur+this.denominateur*q.numerateur,this.denominateur*q.denominateur);
     }
 
     public Fraction soustraction(Fraction q){
-        return reduire(addition(Fraction.oppose(q)));
+        return addition(Fraction.oppose(q));
     }
 
     public Fraction multiplication(Fraction q){
-        return reduire(new Fraction(this.numerateur*q.numerateur,this.denominateur*q.denominateur));
+        return new Fraction(this.numerateur*q.numerateur,this.denominateur*q.denominateur);
     }
 
     public Fraction division(Fraction q){
-        return reduire(multiplication(Fraction.inverse(q)));
+        return multiplication(Fraction.inverse(q));
     }
 
     public Fraction produit(int a){
-        return reduire(multiplication(new Fraction(a)));
+        return multiplication(new Fraction(a));
     }
 
     private boolean plusPetit(Fraction frac){
@@ -88,10 +92,6 @@ public class Fraction implements Comparable {
 
     private boolean plusGrand(Fraction frac){
         return (this.numerateur * frac.denominateur) > (this.denominateur * frac.numerateur);
-    }
-
-    private boolean egal(Fraction frac){
-        return (this.numerateur * frac.denominateur) == (this.denominateur * frac.numerateur);
     }
 
     @Override

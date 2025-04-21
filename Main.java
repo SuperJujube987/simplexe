@@ -1,23 +1,32 @@
 public class Main {
     public static void main(String[] args) {
-        Matrice m = new Matrice(4,7);
-        m.setLigne(0, new Fraction[]{new Fraction(1), new Fraction(0),
-                new Fraction(0), new Fraction(3), new Fraction(2),
-                new Fraction(0), new Fraction(60)});
-        m.setLigne(1, new Fraction[]{new Fraction(0), new Fraction(1),
-                new Fraction(0), new Fraction(-1), new Fraction(1),
-                new Fraction(4), new Fraction(10)});
-        m.setLigne(2, new Fraction[]{new Fraction(0), new Fraction(0),
-                new Fraction(1), new Fraction(2), new Fraction(-2),
-                new Fraction(5), new Fraction(50)});
-        m.setLigne(3, new Fraction[]{new Fraction(0), new Fraction(0),
-                new Fraction(0), new Fraction(-2), new Fraction(-3),
-                new Fraction(-3), new Fraction(0)});
+        Fraction f1 = new Fraction(2);
+        Fraction f2 = new Fraction(2,3);
+        Fraction f3 = new Fraction(2,4);
+        Fraction f4 = new Fraction(0);
+        Fraction f5 = new Fraction(0);
+        Fraction f6 = new Fraction(0);
+        try{
+            f4 = Fraction.parse("");
+        }catch (IllegalArgumentException e){
+            System.err.println("erreur f4:" + e.getMessage());
+        }
+        try {
+            f5 = Fraction.parse("2");
+        }catch (IllegalArgumentException e){
+            System.err.println("erreur f5:" + e.getMessage());
+        }
+        try {
+            f6 = Fraction.parse("2/5");
+        }catch (IllegalArgumentException e){
+            System.err.println("erreur f6:" + e.getMessage());
+        }
+        System.out.println(f1);
+        System.out.println(f2);
+        System.out.println(f3);
+        System.out.println(f4);
+        System.out.println(f5);
+        System.out.println(f6);
 
-        System.out.println("Matrice initiale :");
-        System.out.println(m);
-        Matrice m1 = Matrice.simplexe(m, new int[]{0,1,2}, new int[]{4,2,3});
-        System.out.println("Matrice après la méthode du simplexe :");
-        System.out.println(m1);
     }
 }
