@@ -19,13 +19,23 @@ public class Fraction implements Comparable {
         this.numerateur = frac.numerateur;
         this.denominateur = frac.denominateur;
     }
-
+    //TODO accepter les nombres à virgule
     public static Fraction parse(String str){
+        if (str.equalsIgnoreCase(""))
+            return new Fraction(0);
         String[] parts = str.split("/");
         if (parts.length == 1) {
-            return new Fraction(Integer.parseInt(parts[0]));
+            try{
+                return new Fraction(Integer.parseInt(parts[0]));
+            }catch (IllegalArgumentException e){
+                throw new IllegalArgumentException("Le nombre doit être un nombre entier");
+            }
         } else if (parts.length == 2) {
-            return new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            try{
+                return new Fraction(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            }catch (IllegalArgumentException e){
+                throw new IllegalArgumentException("Le numérateur et le dénominateur doivent être des nombres entiers");
+            }
         } else {
             throw new IllegalArgumentException("La fraction doit être au format 'numerateur/denominateur'");
         }
@@ -36,9 +46,9 @@ public class Fraction implements Comparable {
         int a = num1;
         int b;
         do {
-            b=reste;
+            b = reste;
             reste = a%b;
-            a=b;
+            a = b;
         }while (reste != 0);
         return b;
     }
@@ -103,6 +113,8 @@ public class Fraction implements Comparable {
 
     @Override
     public int compareTo(Object o) {
+        if (o == null)
+            throw new NullPointerException();
         if (!(o instanceof Integer || o instanceof Fraction))
             throw new ClassCastException("Objet non comparable à une fraction");
         Fraction a;
@@ -115,7 +127,6 @@ public class Fraction implements Comparable {
             return -1;
         if (plusGrand(a))
             return 1;
-        else
-            return 0;
+        return 0;
     }
 }
